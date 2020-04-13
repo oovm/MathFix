@@ -1,0 +1,66 @@
+program = _{SOI ~ statement* ~ EOI}
+statement = _{
+    SEPARATOR
+  | empty_line{1,}
+  | Expression
+}
+empty_line = _{WHITESPACE* ~ NEWLINE}
+RestOfLine = @{(!NEWLINE ~ ANY)+}
+/*====================================================================================================================*/
+//!#C678DD: Import|As
+
+/*====================================================================================================================*/
+//!#D19A66: SignedNumber
+Number       = ${(Exponent|SignedNumber) ~ SYMBOL?}
+SignedNumber = ${Sign? ~ (Decimal|DecimalBad|Integer)}
+Decimal      = ${Integer ~ Dot ~ (Underline? ~ ASCII_DIGIT)*}
+DecimalBad   = ${Integer ~ Dot|Dot ~ (Underline? ~ ASCII_DIGIT)*}
+Integer      = @{Zero|ASCII_NONZERO_DIGIT ~ (Underline? ~ ASCII_DIGIT)*}
+Exponent     =  {SignedNumber ~ ("e"|"E") ~ Sign? ~ ASCII_DIGIT+}
+
+Zero = _{"0"}
+Dot = @{"."}
+Sign = @{"+"|"-"}
+/*====================================================================================================================*/
+//!#3C963C: String
+//!#98C379: StringQuotation|StringAccent|RestOfLine
+//!#D19A66: StringApostrophe
+String        =  {SYMBOL}
+Quotation  = @{"\""}
+
+Group = {"{" ~ "}" | "{" ~ (Atom|Expression) ~ "}"}
+Atom  = {Number|Operators|SYMBOL|Group}
+Expression = {Atom+}
+/*====================================================================================================================*/
+///#61AFEF
+Function = {
+    LargeFunction ~ "_" ~ Atom ~ "^" ~ Atom
+  | NormalFunction ~ Atom
+}
+LargeFunction  = @{Escape ~ ("int"|"sum"|"prod"|"limit")}
+NormalFunction = @{Escape ~ SYMBOL}
+/*====================================================================================================================*/
+//!#56B6C2: Operators
+Escape    = @{"\\"}
+Operators = @{
+    ("+" | "-")+
+  | IDS_BINARY_OPERATOR
+}
+/*====================================================================================================================*/
+///#61AFEF
+SYMBOL    = @{XID_START ~ XID_CONTINUE*}
+
+
+/*====================================================================================================================*/
+// NEWLINE = @{"\r" ~ "\n"|"\r"|"\n"}
+
+///Gray
+COMMENT          =  {MultiLineComment|LineComment}
+WHITESPACE       = _{NEWLINE|SPACE_SEPARATOR|"\t"}
+LineComment      = ${"%" ~ (!NEWLINE ~ ANY)*}
+MultiLineComment = ${"%%%" ~ (MultiLineComment | !"%%%" ~ ANY)* ~ "%%%"}
+
+
+Underline  = @{"_"}
+SEPARATOR  = _{","|";"}
+

@@ -1,0 +1,17 @@
+[workspace]
+
+default-members = [
+    "projects/latex-parser",
+    "projects/latex-fmt",
+]
+members = ["projects/*"]
+
+[profile.release]
+lto = true
+opt-level = "s"
+
+
+[scripts]
+pest_build = "cargo test --color=always --package latex_parser --lib pre_build::gen_parser --no-fail-fast -- --ignored --exact -Z unstable-options --format=json --show-output"
+pest_fmt   = "rustup run nightly cargo fmt -- --unstable-features"
+pest = "wee pest_build && wee pest_fmt"

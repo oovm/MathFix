@@ -1,0 +1,18 @@
+[package]
+name = "latex_fmt"
+version = "0.1.0"
+authors = ["192607617@qq.com"]
+edition = "2018"
+description = "..."
+repository = "https://github.com/Moe-Net/arc-rs"
+license = "MPL-2.0"
+
+
+[dependencies]
+pest = "2.1.2"
+textwrap = "0.11"
+latex_parser = {path = "../latex-parser",version = "0.3.0"}
+
+[dev-dependencies]
+
+[features]
