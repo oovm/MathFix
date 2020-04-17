@@ -20,6 +20,7 @@ Exponent     =  {SignedNumber ~ ("e"|"E") ~ Sign? ~ ASCII_DIGIT+}
 
 Zero = _{"0"}
 Dot = @{"."}
+Underline = @{"_"}
 Sign = @{"+"|"-"}
 /*====================================================================================================================*/
 //!#3C963C: String
@@ -28,39 +29,37 @@ Sign = @{"+"|"-"}
 String        =  {SYMBOL}
 Quotation  = @{"\""}
 
-Group = {"{" ~ "}" | "{" ~ (Atom|Expression) ~ "}"}
-Atom  = {Number|Operators|SYMBOL|Group}
+Group = {EmptyGroup | "{" ~ Atom ~ "}" | "{" ~ Expression ~ "}"}
+Atom  = {Number|Operators|SYMBOL|NEWLINE|Group|Function}
 Expression = {Atom+}
+EmptyGroup = {"{" ~ "}"}
 /*====================================================================================================================*/
 ///#61AFEF
 Function = {
-    LargeFunction ~ "_" ~ Atom ~ "^" ~ Atom
-  | NormalFunction ~ Atom
+    FractionFunction
+  | NormalFunction
 }
+FractionFunction = {Fraction ~ (Integer|Atom) ~ (Integer|Atom)}
+NormalFunction = {Escape ~ SYMBOL ~ Atom}
+Fraction = @{Escape ~ ("frac"|"dfrac")}
 LargeFunction  = @{Escape ~ ("int"|"sum"|"prod"|"limit")}
-NormalFunction = @{Escape ~ SYMBOL}
 /*====================================================================================================================*/
 //!#56B6C2: Operators
 Escape    = @{"\\"}
-Operators = @{
-    ("+" | "-")+
+Operators = @{(
+    "+"|"-"|"&"|"*"
+  | "("|")"|"["|"]"|"<"|">"
   | IDS_BINARY_OPERATOR
-}
+)+}
 /*====================================================================================================================*/
 ///#61AFEF
-SYMBOL    = @{XID_START ~ XID_CONTINUE*}
+SYMBOL = @{XID_START ~ XID_CONTINUE*}
 
 
 /*====================================================================================================================*/
-// NEWLINE = @{"\r" ~ "\n"|"\r"|"\n"}
-
 ///Gray
-COMMENT          =  {MultiLineComment|LineComment}
-WHITESPACE       = _{NEWLINE|SPACE_SEPARATOR|"\t"}
-LineComment      = ${"%" ~ (!NEWLINE ~ ANY)*}
-MultiLineComment = ${"%%%" ~ (MultiLineComment | !"%%%" ~ ANY)* ~ "%%%"}
-
-
-Underline  = @{"_"}
-SEPARATOR  = _{","|";"}
+COMMENT          = ${"%" ~ (!NEWLINE ~ ANY)*}
+WHITESPACE       = _{SPACE_SEPARATOR|"\t"}
+NEWLINE          = @{"\r" ~ "\n"|"\r"|"\n"}
+// SEPARATOR  = _{","|";"}
 
