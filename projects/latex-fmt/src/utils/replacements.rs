@@ -1,30 +1,30 @@
 pub fn replace_operator(s: &str) -> String {
     let r = match s {
         // Array
-        "|->" => "\\mapsto",
-        "<->" => "\\leftrightarrow",
-        "<=>" => "\\Leftrightarrow",
-        "==>" => "\\Longrightarrow",
-        "->" => "\\rightarrow",
-        "=>" => "\\Rightarrow",
+        "|->" => "mapsto",
+        "<->" => "leftrightarrow",
+        "<=>" => "Leftrightarrow",
+        "==>" => "Longrightarrow",
+        "->" => "rightarrow",
+        "=>" => "Rightarrow",
         // Dots
-        "..." => "\\cdots",
+        "..." => "cdots",
         // Arithmetic
-        "+-" => "\\pm",
-        "-+" => "\\mp",
-        "==" => "\\equiv",
-        "!=" => "\\ne",
-        ">=" => "\\geqslant",
-        "<=" => "\\leqslant",
-        "<<" => "\\ll",
-        ">>" => "\\gg",
-        _ => s,
+        "+-" => "pm",
+        "-+" => "mp",
+        "==" => "equiv",
+        "!=" => "ne",
+        ">=" => "geqslant",
+        "<=" => "leqslant",
+        "<<" => "ll",
+        ">>" => "gg",
+        _ => return format!("{}", s),
     };
-    r.to_string()
+    format!(" \\{} ", r)
 }
 
 pub fn replace_operator_name(s: &str) -> String {
     let names = ["arccot", "arcsec", "arccsc"];
-    let f = &s[1..s.len()];
-    if names.contains(&f) { format!("\\operatorname{{{}}}", f) } else { format!("\\{}", f) }
+    let symbol = &s[1..s.len()];
+    if names.contains(&symbol) { format!("\\operatorname{{{}}}", symbol) } else { format!("\\{}", symbol) }
 }

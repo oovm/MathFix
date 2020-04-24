@@ -1,5 +1,5 @@
 use crate::{
-    utils::{indent, replace_operator_name, split_once},
+    utils::{replace_operator, replace_operator_name},
     Settings,
 };
 use latex_parser::{LaTeXParser, Rule};
@@ -51,6 +51,7 @@ impl Settings {
                     let c = pair.as_str();
                     codes.push(format!("% {}", c[1..c.len()].trim()))
                 }
+                Rule::Group => codes.push(self.format_group(pair, false)),
                 Rule::Atom => codes.push(self.format_atom(pair)),
                 _ => debug_cases!(pair),
             };
@@ -58,16 +59,22 @@ impl Settings {
         return codes.join("");
     }
 
-    fn format_group(&self, pairs: Pair<Rule>) -> String {
+    fn format_group(&self, pairs: Pair<Rule>, keep_group: bool) -> String {
         let mut codes = vec![];
         for pair in pairs.into_inner() {
             match pair.as_rule() {
                 Rule::Atom => codes.push(self.format_atom(pair)),
-                Rule::Expression => {
-                    codes.push(String::from("{"));
-                    codes.push(self.format_expression(pair));
-                    codes.push(String::from("}"));
+                Rule::Group => {
+                    if keep_group {
+                        codes.push(String::from("{"));
+                        codes.push(self.format_group(pair, true));
+                        codes.push(String::from("}"));
+                    }
+                    else {
+                        codes.push(self.format_group(pair, false));
+                    }
                 }
+                Rule::Expression => codes.push(self.format_expression(pair)),
                 _ => debug_cases!(pair),
             };
         }
@@ -81,7 +88,8 @@ impl Settings {
                 Rule::NEWLINE => codes.push(String::from("\n")),
                 Rule::Number => codes.push(pair.as_str().to_string()),
                 Rule::SYMBOL => codes.push(pair.as_str().to_string()),
-                Rule::Group => codes.push(self.format_group(pair)),
+                Rule::Operators => codes.push(replace_operator(pair.as_str())),
+                Rule::Group => codes.push(self.format_group(pair, false)),
                 Rule::Function => codes.push(self.format_function(pair)),
                 _ => debug_cases!(pair),
             };
@@ -93,14 +101,29 @@ impl Settings {
         let mut codes = vec![];
         for pair in pairs.into_inner() {
             match pair.as_rule() {
-                Rule::NormalFunction => codes.push(replace_operator_name(pair.as_str())),
-                Rule::FractionFunction => {
+                Rule::NormalFunction => {
                     for inner in pair.into_inner() {
                         match inner.as_rule() {
-                            Rule::Fraction => codes.push(inner.as_str().to_string()),
-                            Rule::Atom => {
+                            Rule::Escape => continue,
+                            Rule::NormalHead => codes.push(replace_operator_name(inner.as_str())),
+                            Rule::SYMBOL => codes.push(format!(" {}", inner.as_str())),
+                            Rule::Group => {
                                 codes.push(String::from("{"));
-                                codes.push(self.format_atom(inner));
+                                codes.push(self.format_group(inner, false));
+                                codes.push(String::from("}"));
+                            }
+                            _ => debug_cases!(inner),
+                        };
+                    }
+                }
+                Rule::UnaryFunction => {
+                    for inner in pair.into_inner() {
+                        match inner.as_rule() {
+                            Rule::UnaryHead => codes.push(inner.as_str().to_string()),
+                            Rule::Atom => codes.push(self.format_atom(inner)),
+                            Rule::Group => {
+                                codes.push(String::from("{"));
+                                codes.push(self.format_group(inner, false));
                                 codes.push(String::from("}"));
                             }
                             _ => debug_cases!(inner),

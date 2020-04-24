@@ -7,52 +7,46 @@ statement = _{
 empty_line = _{WHITESPACE* ~ NEWLINE}
 RestOfLine = @{(!NEWLINE ~ ANY)+}
 /*====================================================================================================================*/
-//!#C678DD: Import|As
-
-/*====================================================================================================================*/
-//!#D19A66: SignedNumber
-Number       = ${(Exponent|SignedNumber) ~ SYMBOL?}
-SignedNumber = ${Sign? ~ (Decimal|DecimalBad|Integer)}
-Decimal      = ${Integer ~ Dot ~ (Underline? ~ ASCII_DIGIT)*}
-DecimalBad   = ${Integer ~ Dot|Dot ~ (Underline? ~ ASCII_DIGIT)*}
-Integer      = @{Zero|ASCII_NONZERO_DIGIT ~ (Underline? ~ ASCII_DIGIT)*}
-Exponent     =  {SignedNumber ~ ("e"|"E") ~ Sign? ~ ASCII_DIGIT+}
+///#D19A66
+Number       = ${Decimal|DecimalBad|Integer}
+Decimal      = ${Integer ~ Dot ~ ASCII_DIGIT*}
+DecimalBad   = ${Integer ~ Dot|Dot ~ ASCII_DIGIT*}
+Integer      = @{Zero|ASCII_NONZERO_DIGIT ~ ASCII_DIGIT*}
 
 Zero = _{"0"}
 Dot = @{"."}
-Underline = @{"_"}
-Sign = @{"+"|"-"}
 /*====================================================================================================================*/
-//!#3C963C: String
-//!#98C379: StringQuotation|StringAccent|RestOfLine
-//!#D19A66: StringApostrophe
-String        =  {SYMBOL}
-Quotation  = @{"\""}
-
-Group = {EmptyGroup | "{" ~ Atom ~ "}" | "{" ~ Expression ~ "}"}
-Atom  = {Number|Operators|SYMBOL|NEWLINE|Group|Function}
-Expression = {Atom+}
+Group = {EmptyGroup | "{" ~ Group ~ "}" | "{" ~ Atom ~ "}" | "{" ~ Expression ~ "}"}
+Atom  = {Number|Operators|SYMBOL|NEWLINE|Function}
+Expression = {(Atom|Group)+}
 EmptyGroup = {"{" ~ "}"}
 /*====================================================================================================================*/
 ///#61AFEF
 Function = {
-    FractionFunction
+    UnaryFunction
   | NormalFunction
 }
-FractionFunction = {Fraction ~ (Integer|Atom) ~ (Integer|Atom)}
-NormalFunction = {Escape ~ SYMBOL ~ Atom}
-Fraction = @{Escape ~ ("frac"|"dfrac")}
-LargeFunction  = @{Escape ~ ("int"|"sum"|"prod"|"limit")}
+NormalFunction = {NormalHead ~ (SYMBOL|Group*)}
+UnaryFunction = {UnaryHead ~ (Atom|Group)}
+NormalHead = ${Escape ~ SYMBOL}
+UnaryHead = @{"^"|"_"}
 /*====================================================================================================================*/
 //!#56B6C2: Operators
 Escape    = @{"\\"}
 Operators = @{(
-    "+"|"-"|"&"|"*"
-  | "("|")"|"["|"]"|"<"|">"
+    '!'..'/'
+  | ':'..'@'
+  | "`" | "[" | "]"
   | IDS_BINARY_OPERATOR
-)+}
+  | IDS_TRINARY_OPERATOR
+  | EscapedOperator
+)+| "–" | "−" | "|"
+}
+EscapedOperator = @{
+    Escape ~ (Escape|"{"|"}"|",")
+}
 /*====================================================================================================================*/
-///#61AFEF
+///#E06C75
 SYMBOL = @{XID_START ~ XID_CONTINUE*}
 
 

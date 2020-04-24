@@ -1,0 +1,74 @@
+$$\pi = \sum\limits_{k = 0}^\infty {\frac{1}{{16}^k}\left( {\frac{4}{8k + 1} - \frac{2}{8k + 4} - \frac{1}{8k + 5} - \frac{1}{8k + 6}} \right)} $$
+
+
+$$\begin{aligned}
+\int_0^{1/\sqrt 2} {\frac{x^{p - 1}}{1 - {x^8}}{ \mathrm{d}}x} &= \int_0^{1/\sqrt 2 } {\sum\limits_{k = 0}^\infty {x^{p - 1 + 8k}} { \mathrm{d}}x} \\
+&= \sum_{k = 0}^\infty {\int_0^{1/\sqrt 2 } {{x^{p - 1 + 8k}}{ \mathrm{d}}x} } \\
+&= \sum\limits_{k = 0}^\infty {\frac{{{2^{ - 4k - \frac{p}{2}}}}}{8k + p}} \\
+&= \frac{1}{2^{p/2}}\sum\limits_{k = 0}^\infty {\frac{1}{{16}^k}\frac{1}{8k + p}} \\
+\end{aligned} $$
+
+$$\begin{aligned}
+&\sum\limits_{k = 0}^\infty {\frac{1}{{16}^k}\left( {\frac{4}{8k + 1} - \frac{2}{8k + 4} - \frac{1}{8k + 5} - \frac{1}{8k + 6}} \right)} \\
+=& 4 \cdot {2^{1/2}}\int_0^{1/\sqrt 2 } {\frac{{{x^{1 - 1}}{ \mathrm{d}}x}}{1 - {x^8}}} - 2 \cdot {2^{4/2}}\int_0^{1/\sqrt 2 } {\frac{{{x^{4 - 1}}{ \mathrm{d}}x}}{1 - {x^8}}} - 2 \cdot {2^{5/2}}\int_0^{1/\sqrt 2 } {\frac{{{x^{5 - 1}}{ \mathrm{d}}x}}{1 - {x^8}}} - {2^{6/2}}\int_0^{1/\sqrt 2 } {\frac{{{x^{6 - 1}}{ \mathrm{d}}x}}{1 - {x^8}}} \\
+=& \int_0^{1/\sqrt 2} {\frac{4\sqrt 2 - 8{x^3} - 4\sqrt 2 {x^4} - 8{x^5}}{1 - {x^8}}{ \mathrm{d}}x} \quad \sqrt 2 x \to y\\
+=& \int_0^1 {\frac{16y - 16}{{y^4} - 2{y^3} + 4y - 4}{ \mathrm{d}}y} \\
+=& \int_0^1 {\frac{4y}{{y^2} - 2}{ \mathrm{d}}y} - \int_0^1 {\frac{4y - 8}{{y^2} - 2y + 2}{ \mathrm{d}}y} \\
+=& 4\left. {\left[ {\frac{1}{2}\ln ({y^2} - 2)} \right]} \right|_0^1 - 4\left. {\left[ {\frac{1}{2}\ln ({y^2} - 2y + 2) + \arctan (1 - y)} \right]} \right|_0^1\\
+=& - \ln 4 - (- \pi - \ln 4)\\
+=& \pi \\
+\end{aligned}$$
+
+$$P(\color{green}{s},\color{blue}{b},\color{red}{n},A)=\sum_{k=0}^\infty \frac1{\color{blue}b^k}\sum_{j=1}^{\color{red}n} \frac{a_j}{(\color{red}nk+j)^\color{green}s}$$
+
+$$\begin{aligned}
+\pi &=\sum_{k=0}^\infty \frac1{\color{blue}{16}^k}\bigg(\frac4{(\color{red}8k+1)^\color{green}1}-\frac2{(\color{red}8k+4)^\color{green}1}-\frac1{(\color{red}8k+5)^\color{green}1}-\frac1{(\color{red}8k+6)^\color{green}1}\bigg)\\
+&= P(\color{green}1,\color{blue}{16},\color{red}8,(4,0,0,−2,−1,−1,0,0))
+\end{aligned} $$
+
+$$\Phi (z,s,a) = \sum\limits_{k = 0}^\infty {z^k} {(a + k)^{ - s}}$$
+
+$$\sum\limits_{k = 0}^\infty {\frac{1}{b^k}\frac{1}{{(j + kn)}^s}} = \frac{1}{n^s}\Phi \left( {\frac{1}{b},s,\frac{j}{n}} \right)$$
+
+$$\begin{aligned}
+\pi &= \sum_{k = 0}^{\infty} \frac{1}{16^k} \left( \frac{4}{8k + 1} - \frac{2}{8k + 4} - \frac{1}{8k + 5} - \frac{1}{8k + 6} \right)\\
+16^{n} \pi &= \sum_{k = 0}^{\infty} \left( \frac{4 \cdot 16^{k-n}}{8k + 1} - \frac{2\cdot 16^{k-n}}{8k + 4} - \frac{ 16^{k-n}}{8k + 5} - \frac{16^{k-n}}{8k + 6} \right)
+\end{aligned} $$
+
+$$\begin{aligned}
+\{{16^n}\pi \} &= \left\{ {\sum\limits_{k = 0}^\infty {\left( {\frac{{4 \cdot {{16}^{k - n}}}}{8k + 1} - \frac{{2 \cdot {{16}^{k - n}}}}{8k + 4} - \frac{{16}^{k - n}}{8k + 5} - \frac{{16}^{k - n}}{8k + 6}} \right)} } \right\}\\
+&= \{4\{ {16^n}{S_1}\} - 2\{ {16^n}{S_4}\} - \{ {16^n}{S_5}\} - \{ {16^n}{S_6}\} \} \\
+\{{16^n}{S_j}\} &= \left\{ {\left\{ {\sum_{k = 0}^n {\frac{{16}^{n - k}}{8k + j}} } \right\} + \sum\limits_{k = n + 1}^\infty {\frac{{16}^{n - k}}{8k + j}} } \right\}\\
+&= \left\{{\left\{ {\sum_{k = 0}^n {\frac{{{{16}^{n - k}}\quad \bmod \,8k + j}}{8k + j}} } \right\} + \sum_{k = n + 1}^\infty {\frac{{16}^{n - k}}{8k + j}} } \right\}\\
+\end{aligned} $$
+
+$$\pi = \sum\limits_{k = 0}^\infty {{{\left( {\frac{1}{16}} \right)}^k}} \left( {\frac{8r + 4}{8k + 1} - \frac{8r}{8k + 2} - \frac{4r}{8k + 3} - \frac{8r + 2}{8k + 4} - \frac{2r + 1}{8k + 5} - \frac{2r + 1}{8k + 6} + \frac{r}{8k + 7}} \right)$$
+
+$$\begin{aligned}
+\pi &= \frac{1}{2}\sum\limits_{k = 0}^\infty {\frac{1}{{16}^k}} \left( {\frac{8}{8k + 2} + \frac{4}{8k + 3} + \frac{4}{8k + 4} - \frac{1}{8k + 7}} \right)\\
+\zeta (2) &= \frac{\pi^2}{6} = \frac{3}{16}\sum\limits_{k = 0}^\infty {\frac{1}{{64}^k}} \left( {\frac{16}{{(6k + 1)}^2} - \frac{24}{{(6k + 2)}^2} - \frac{8}{{(6k + 3)}^2} - \frac{6}{{(6k + 4)}^2} + \frac{1}{{(6k + 5)}^2}} \right)\\
+\zeta (3) &= \frac{9}{224}\sum\limits_{k = 0}^\infty {\frac{1}{{4096}^k}}
+\left(\begin{aligned}
+&\frac{1024}{{(24k + 2)}^3} - \frac{3072}{{(24k + 3)}^3} + \frac{512}{{(24k + 4)}^3} + \frac{1024}{{(24k + 6)}^3} + \frac{1152}{{(24k + 8)}^3}\\
++& \frac{384}{{(24k + 9)}^3} + \frac{64}{{(24k + 10)}^3} + \frac{128}{{(24k + 12)}^3} + \frac{16}{{(24k + 14)}^3} + \frac{48}{{(24k + 15)}^3} + \frac{72}{{(24k + 16)}^3}\\
++& \frac{16}{{(24k + 18)}^3} + \frac{2}{{(24k + 20)}^3} - \frac{6}{{(24k + 21)}^3} + \frac{1}{{(24k + 22)}^3}\\
+\end{aligned} \right)\\
+\end{aligned}$$
+
+$$\begin{aligned}
+\operatorname{arccot} b &= \arctan {\frac {1}{b}}\\
+&={\frac {1}{b}}-{\frac {1}{b^{3}3}}+{\frac {1}{b^{5}5}}-{\frac {1}{b^{7}7}}+{\frac {1}{b^{9}9}}+\cdots \\
+&=\sum _{k=1}^{\infty }\left[{\frac {1}{b^{k}}}{\frac {\sin {\frac {k\pi }{2}}}{k}}\right]\\
+&={\frac {1}{b}}\sum _{k=0}^{\infty }\left[{\frac {1}{b^{4k}}}\left({\frac {1}{4k+1}}+{\frac {-b^{-2}}{4k+3}}\right)\right]\\
+&={\frac {1}{b}}P\left(1,b^{4},4,(1,0,-b^{-2},0)\right)\\
+\ln \left({1 - \frac{1}{b^m}} \right) &= - \frac{1}{b^m}\sum\limits_{k = 0}^\infty {\frac{1}{1 + k}{b^{ - mk}}} \\
+&= - \frac{1}{b^m}P(1,{b^m},1,(1))\\
+\end{aligned}$$
+
+$${\pi^2} = \sum\limits_{k = 0}^\infty {\frac{1}{\phi^{5k}}\left( {\frac{\phi^{ - 2}}{{{{\left( {5k + 1} \right)}^2}}} - \frac{\phi^{ - 1}}{{{{\left( {5k + 2} \right)}^2}}} - \frac{\phi^{ - 2}}{{{{\left( {5k + 3} \right)}^2}}} + \frac{\phi^{ - 5}}{{{{\left( {5k + 4} \right)}^2}}} + \frac{{2{\phi^{ - 5}}}}{{{{\left( {5k + 5} \right)}^2}}}} \right)}$$
+
+$$\sum\limits_{k = 0}^\infty {\frac{{(-1)}^k}{4^k}\left( {\frac{2}{4k + 1} + \frac{2}{4k + 2} + \frac{1}{4k + 3}} \right)}$$
+
+$$\sum_{k = 0}^\infty {\frac{1}{2^k}\left( {\frac{a_1}{2k + 1} + \frac{a_2}{2k + 2}} \right)} = {a_2}\log (2) + \sqrt 2 {a_1}{\operatorname{arcsinh}}(1)$$
+
+
