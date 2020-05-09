@@ -7,12 +7,6 @@ pub enum Rule {
     statement,
     empty_line,
     RestOfLine,
-    Number,
-    Decimal,
-    DecimalBad,
-    Integer,
-    Zero,
-    Dot,
     Group,
     Atom,
     Expression,
@@ -22,10 +16,11 @@ pub enum Rule {
     UnaryFunction,
     NormalHead,
     UnaryHead,
+    SYMBOL,
+    Number,
     Escape,
     Operators,
     EscapedOperator,
-    SYMBOL,
     COMMENT,
     WHITESPACE,
     NEWLINE,
@@ -66,36 +61,6 @@ impl ::pest::Parser<Rule> for LaTeXParser {
                 }
                 #[inline]
                 #[allow(non_snake_case, unused_variables)]
-                pub fn Number(state: Box<::pest::ParserState<Rule>>) -> ::pest::ParseResult<Box<::pest::ParserState<Rule>>> {
-                    state.atomic(::pest::Atomicity::CompoundAtomic, |state| state.rule(Rule::Number, |state| self::Decimal(state).or_else(|state| self::DecimalBad(state)).or_else(|state| self::Integer(state))))
-                }
-                #[inline]
-                #[allow(non_snake_case, unused_variables)]
-                pub fn Decimal(state: Box<::pest::ParserState<Rule>>) -> ::pest::ParseResult<Box<::pest::ParserState<Rule>>> {
-                    state.atomic(::pest::Atomicity::CompoundAtomic, |state| state.rule(Rule::Decimal, |state| state.sequence(|state| self::Integer(state).and_then(|state| self::Dot(state)).and_then(|state| state.repeat(|state| self::ASCII_DIGIT(state))))))
-                }
-                #[inline]
-                #[allow(non_snake_case, unused_variables)]
-                pub fn DecimalBad(state: Box<::pest::ParserState<Rule>>) -> ::pest::ParseResult<Box<::pest::ParserState<Rule>>> {
-                    state.atomic(::pest::Atomicity::CompoundAtomic, |state| state.rule(Rule::DecimalBad, |state| state.sequence(|state| self::Integer(state).and_then(|state| self::Dot(state))).or_else(|state| state.sequence(|state| self::Dot(state).and_then(|state| state.repeat(|state| self::ASCII_DIGIT(state)))))))
-                }
-                #[inline]
-                #[allow(non_snake_case, unused_variables)]
-                pub fn Integer(state: Box<::pest::ParserState<Rule>>) -> ::pest::ParseResult<Box<::pest::ParserState<Rule>>> {
-                    state.rule(Rule::Integer, |state| state.atomic(::pest::Atomicity::Atomic, |state| self::Zero(state).or_else(|state| state.sequence(|state| self::ASCII_NONZERO_DIGIT(state).and_then(|state| state.repeat(|state| self::ASCII_DIGIT(state)))))))
-                }
-                #[inline]
-                #[allow(non_snake_case, unused_variables)]
-                pub fn Zero(state: Box<::pest::ParserState<Rule>>) -> ::pest::ParseResult<Box<::pest::ParserState<Rule>>> {
-                    state.match_string("0")
-                }
-                #[inline]
-                #[allow(non_snake_case, unused_variables)]
-                pub fn Dot(state: Box<::pest::ParserState<Rule>>) -> ::pest::ParseResult<Box<::pest::ParserState<Rule>>> {
-                    state.rule(Rule::Dot, |state| state.atomic(::pest::Atomicity::Atomic, |state| state.match_string(".")))
-                }
-                #[inline]
-                #[allow(non_snake_case, unused_variables)]
                 pub fn Group(state: Box<::pest::ParserState<Rule>>) -> ::pest::ParseResult<Box<::pest::ParserState<Rule>>> {
                     state.rule(Rule::Group, |state| self::EmptyGroup(state).or_else(|state| state.sequence(|state| state.match_string("{").and_then(|state| super::hidden::skip(state)).and_then(|state| self::Group(state)).and_then(|state| super::hidden::skip(state)).and_then(|state| state.match_string("}")))).or_else(|state| state.sequence(|state| state.match_string("{").and_then(|state| super::hidden::skip(state)).and_then(|state| state.sequence(|state| self::Atom(state).and_then(|state| super::hidden::skip(state)).and_then(|state| state.match_string("}"))).or_else(|state| state.sequence(|state| self::Expression(state).and_then(|state| super::hidden::skip(state)).and_then(|state| state.match_string("}"))))))))
                 }
@@ -132,12 +97,22 @@ impl ::pest::Parser<Rule> for LaTeXParser {
                 #[inline]
                 #[allow(non_snake_case, unused_variables)]
                 pub fn NormalHead(state: Box<::pest::ParserState<Rule>>) -> ::pest::ParseResult<Box<::pest::ParserState<Rule>>> {
-                    state.atomic(::pest::Atomicity::CompoundAtomic, |state| state.rule(Rule::NormalHead, |state| state.sequence(|state| self::Escape(state).and_then(|state| self::SYMBOL(state)))))
+                    state.rule(Rule::NormalHead, |state| state.atomic(::pest::Atomicity::Atomic, |state| state.sequence(|state| self::Escape(state).and_then(|state| self::SYMBOL(state)))))
                 }
                 #[inline]
                 #[allow(non_snake_case, unused_variables)]
                 pub fn UnaryHead(state: Box<::pest::ParserState<Rule>>) -> ::pest::ParseResult<Box<::pest::ParserState<Rule>>> {
                     state.rule(Rule::UnaryHead, |state| state.atomic(::pest::Atomicity::Atomic, |state| state.match_string("^").or_else(|state| state.match_string("_"))))
+                }
+                #[inline]
+                #[allow(non_snake_case, unused_variables)]
+                pub fn SYMBOL(state: Box<::pest::ParserState<Rule>>) -> ::pest::ParseResult<Box<::pest::ParserState<Rule>>> {
+                    state.rule(Rule::SYMBOL, |state| state.atomic(::pest::Atomicity::Atomic, |state| state.sequence(|state| self::XID_START(state).and_then(|state| state.repeat(|state| self::XID_START(state))))))
+                }
+                #[inline]
+                #[allow(non_snake_case, unused_variables)]
+                pub fn Number(state: Box<::pest::ParserState<Rule>>) -> ::pest::ParseResult<Box<::pest::ParserState<Rule>>> {
+                    state.rule(Rule::Number, |state| state.atomic(::pest::Atomicity::Atomic, |state| state.sequence(|state| self::ASCII_DIGIT(state).and_then(|state| state.repeat(|state| self::ASCII_DIGIT(state)))).or_else(|state| state.sequence(|state| state.sequence(|state| self::ASCII_DIGIT(state).and_then(|state| state.repeat(|state| self::ASCII_DIGIT(state)))).and_then(|state| state.match_string(".")).and_then(|state| self::ASCII_DIGIT(state)).and_then(|state| state.repeat(|state| self::ASCII_DIGIT(state))))).or_else(|state| state.sequence(|state| state.match_string(".").and_then(|state| self::ASCII_DIGIT(state)).and_then(|state| state.repeat(|state| self::ASCII_DIGIT(state))))).or_else(|state| state.sequence(|state| state.sequence(|state| self::ASCII_DIGIT(state).and_then(|state| state.repeat(|state| self::ASCII_DIGIT(state)))).and_then(|state| state.match_string("."))))))
                 }
                 #[inline]
                 #[allow(non_snake_case, unused_variables)]
@@ -153,11 +128,6 @@ impl ::pest::Parser<Rule> for LaTeXParser {
                 #[allow(non_snake_case, unused_variables)]
                 pub fn EscapedOperator(state: Box<::pest::ParserState<Rule>>) -> ::pest::ParseResult<Box<::pest::ParserState<Rule>>> {
                     state.rule(Rule::EscapedOperator, |state| state.atomic(::pest::Atomicity::Atomic, |state| state.sequence(|state| self::Escape(state).and_then(|state| self::Escape(state).or_else(|state| state.match_string("{")).or_else(|state| state.match_string("}")).or_else(|state| state.match_string(","))))))
-                }
-                #[inline]
-                #[allow(non_snake_case, unused_variables)]
-                pub fn SYMBOL(state: Box<::pest::ParserState<Rule>>) -> ::pest::ParseResult<Box<::pest::ParserState<Rule>>> {
-                    state.rule(Rule::SYMBOL, |state| state.atomic(::pest::Atomicity::Atomic, |state| state.sequence(|state| self::XID_START(state).and_then(|state| state.repeat(|state| self::XID_CONTINUE(state))))))
                 }
                 #[inline]
                 #[allow(non_snake_case, unused_variables)]
@@ -196,11 +166,6 @@ impl ::pest::Parser<Rule> for LaTeXParser {
                 }
                 #[inline]
                 #[allow(dead_code, non_snake_case, unused_variables)]
-                pub fn ASCII_NONZERO_DIGIT(state: Box<::pest::ParserState<Rule>>) -> ::pest::ParseResult<Box<::pest::ParserState<Rule>>> {
-                    state.match_range('1'..'9')
-                }
-                #[inline]
-                #[allow(dead_code, non_snake_case, unused_variables)]
                 fn IDS_BINARY_OPERATOR(state: Box<::pest::ParserState<Rule>>) -> ::pest::ParseResult<Box<::pest::ParserState<Rule>>> {
                     state.match_char_by(::pest::unicode::IDS_BINARY_OPERATOR)
                 }
@@ -208,11 +173,6 @@ impl ::pest::Parser<Rule> for LaTeXParser {
                 #[allow(dead_code, non_snake_case, unused_variables)]
                 fn IDS_TRINARY_OPERATOR(state: Box<::pest::ParserState<Rule>>) -> ::pest::ParseResult<Box<::pest::ParserState<Rule>>> {
                     state.match_char_by(::pest::unicode::IDS_TRINARY_OPERATOR)
-                }
-                #[inline]
-                #[allow(dead_code, non_snake_case, unused_variables)]
-                fn XID_CONTINUE(state: Box<::pest::ParserState<Rule>>) -> ::pest::ParseResult<Box<::pest::ParserState<Rule>>> {
-                    state.match_char_by(::pest::unicode::XID_CONTINUE)
                 }
                 #[inline]
                 #[allow(dead_code, non_snake_case, unused_variables)]
@@ -237,12 +197,6 @@ impl ::pest::Parser<Rule> for LaTeXParser {
             Rule::statement => rules::statement(state),
             Rule::empty_line => rules::empty_line(state),
             Rule::RestOfLine => rules::RestOfLine(state),
-            Rule::Number => rules::Number(state),
-            Rule::Decimal => rules::Decimal(state),
-            Rule::DecimalBad => rules::DecimalBad(state),
-            Rule::Integer => rules::Integer(state),
-            Rule::Zero => rules::Zero(state),
-            Rule::Dot => rules::Dot(state),
             Rule::Group => rules::Group(state),
             Rule::Atom => rules::Atom(state),
             Rule::Expression => rules::Expression(state),
@@ -252,10 +206,11 @@ impl ::pest::Parser<Rule> for LaTeXParser {
             Rule::UnaryFunction => rules::UnaryFunction(state),
             Rule::NormalHead => rules::NormalHead(state),
             Rule::UnaryHead => rules::UnaryHead(state),
+            Rule::SYMBOL => rules::SYMBOL(state),
+            Rule::Number => rules::Number(state),
             Rule::Escape => rules::Escape(state),
             Rule::Operators => rules::Operators(state),
             Rule::EscapedOperator => rules::EscapedOperator(state),
-            Rule::SYMBOL => rules::SYMBOL(state),
             Rule::COMMENT => rules::COMMENT(state),
             Rule::WHITESPACE => rules::WHITESPACE(state),
             Rule::NEWLINE => rules::NEWLINE(state),

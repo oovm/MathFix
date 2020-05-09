@@ -64,6 +64,7 @@ impl Settings {
         for pair in pairs.into_inner() {
             match pair.as_rule() {
                 Rule::Atom => codes.push(self.format_atom(pair)),
+                Rule::EmptyGroup=>continue,
                 Rule::Group => {
                     if keep_group {
                         codes.push(String::from("{"));

@@ -1,35 +1,34 @@
 program = _{SOI ~ statement* ~ EOI}
 statement = _{
     SEPARATOR
-  | empty_line{1,}
   | Expression
 }
-empty_line = _{WHITESPACE* ~ NEWLINE}
 RestOfLine = @{(!NEWLINE ~ ANY)+}
-/*====================================================================================================================*/
-///#D19A66
-Number       = ${Decimal|DecimalBad|Integer}
-Decimal      = ${Integer ~ Dot ~ ASCII_DIGIT*}
-DecimalBad   = ${Integer ~ Dot|Dot ~ ASCII_DIGIT*}
-Integer      = @{Zero|ASCII_NONZERO_DIGIT ~ ASCII_DIGIT*}
-
-Zero = _{"0"}
-Dot = @{"."}
 /*====================================================================================================================*/
 Group = {EmptyGroup | "{" ~ Group ~ "}" | "{" ~ Atom ~ "}" | "{" ~ Expression ~ "}"}
 Atom  = {Number|Operators|SYMBOL|NEWLINE|Function}
 Expression = {(Atom|Group)+}
 EmptyGroup = {"{" ~ "}"}
 /*====================================================================================================================*/
-///#61AFEF
+//!#61AFEF: NormalHead|UnaryHead
 Function = {
     UnaryFunction
   | NormalFunction
 }
 NormalFunction = {NormalHead ~ (SYMBOL|Group*)}
 UnaryFunction = {UnaryHead ~ (Atom|Group)}
-NormalHead = ${Escape ~ SYMBOL}
+NormalHead = @{Escape ~ SYMBOL}
 UnaryHead = @{"^"|"_"}
+/*====================================================================================================================*/
+///#E06C75
+SYMBOL = @{XID_START+}
+///#D19A66
+Number = @{
+    ASCII_DIGIT+
+  | ASCII_DIGIT+ ~ "." ~ ASCII_DIGIT+
+  | "." ~ ASCII_DIGIT+
+  | ASCII_DIGIT+ ~ "."
+}
 /*====================================================================================================================*/
 //!#56B6C2: Operators
 Escape    = @{"\\"}
@@ -45,11 +44,6 @@ Operators = @{(
 EscapedOperator = @{
     Escape ~ (Escape|"{"|"}"|",")
 }
-/*====================================================================================================================*/
-///#E06C75
-SYMBOL = @{XID_START ~ XID_CONTINUE*}
-
-
 /*====================================================================================================================*/
 ///Gray
 COMMENT          = ${"%" ~ (!NEWLINE ~ ANY)*}

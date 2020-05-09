@@ -1,2 +1,4 @@
 mod utils;
-pub use utils::Settings;
+pub mod settings;
+
+pub use settings::Settings;
