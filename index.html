@@ -4,8 +4,6 @@
 
 <head>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/FortAwesome/Font-Awesome@5.14.0/css/all.min.css">
-
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js" crossorigin="anonymous"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js"
         crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
@@ -25,37 +23,62 @@
         <div class="cell">
             <button onClick="calculateArea(1)">Evaluate</button>
             <button onClick="calculateArea(1)">Copy Raw</button>
-            <button onClick="calculateArea(1)">Copy Out</button>
-            <button onClick="calculateArea(1)">Copy TeX</button><br>
-            <textarea id="demo-input-1" spellcheck="false" rows="4">2a*3b</textarea>
-            <pre><code id="demo-output-1" class="language-js">6a^2</code></pre>
-            <label for="demo-tex-1">TeXForm: </label>
-            <div id="demo-tex-1">$$6a^2$$</div>
+            <button onClick="calculateArea(1)">Copy Refined</button>
+            <textarea id="demo-input-1" spellcheck="false" rows="10">$$\begin{aligned}
+                \pi &= \frac{1}{2}\sum\limits_{k = 0}^\infty {\frac{1}{{{{16}^k}}}} \left( {\frac{8}{{8k + 2}} + \frac{4}{{8k + 3}} + \frac{4}{{8k + 4}} - \frac{1}{{8k + 7}}} \right)\\
+                \zeta (2) &= \frac{{{\pi ^2}}}{6} = \frac{3}{{16}}\sum\limits_{k = 0}^\infty {\frac{1}{{{{64}^k}}}} \left( {\frac{{16}}{{{{(6k + 1)}^2}}} - \frac{{24}}{{{{(6k + 2)}^2}}} - \frac{8}{{{{(6k + 3)}^2}}} - \frac{6}{{{{(6k + 4)}^2}}} + \frac{1}{{{{(6k + 5)}^2}}}} \right)\\
+                \zeta (3) &= \frac{9}{{224}}\sum\limits_{k = 0}^\infty {\frac{1}{{{{4096}^k}}}}
+                \left(\begin{aligned}
+                &\frac{{1024}}{{{{(24k + 2)}^3}}} - \frac{{3072}}{{{{(24k + 3)}^3}}} + \frac{{512}}{{{{(24k + 4)}^3}}} + \frac{{1024}}{{{{(24k + 6)}^3}}} + \frac{{1152}}{{{{(24k + 8)}^3}}}\\
+                +& \frac{{384}}{{{{(24k + 9)}^3}}} + \frac{{64}}{{{{(24k + 10)}^3}}} + \frac{{128}}{{{{(24k + 12)}^3}}} + \frac{{16}}{{{{(24k + 14)}^3}}} + \frac{{48}}{{{{(24k + 15)}^3}}} + \frac{{72}}{{{{(24k + 16)}^3}}}\\
+                +& \frac{{16}}{{{{(24k + 18)}^3}}} + \frac{2}{{{{(24k + 20)}^3}}} - \frac{6}{{{{(24k + 21)}^3}}} + \frac{1}{{{{(24k + 22)}^3}}}\\
+                \end{aligned} \right)\\
+                \end{aligned}$$</textarea>
+            <label for="demo-output-tex-1">Raw TeX: </label>
+            <div id="demo-input-tex-1">$$\begin{aligned}
+                \pi &= \frac{1}{2}\sum\limits_{k = 0}^\infty {\frac{1}{{{{16}^k}}}} \left( {\frac{8}{{8k + 2}} +
+                \frac{4}{{8k + 3}} + \frac{4}{{8k + 4}} - \frac{1}{{8k + 7}}} \right)\\
+                \zeta (2) &= \frac{{{\pi ^2}}}{6} = \frac{3}{{16}}\sum\limits_{k = 0}^\infty {\frac{1}{{{{64}^k}}}}
+                \left( {\frac{{16}}{{{{(6k + 1)}^2}}} - \frac{{24}}{{{{(6k + 2)}^2}}} - \frac{8}{{{{(6k + 3)}^2}}} -
+                \frac{6}{{{{(6k + 4)}^2}}} + \frac{1}{{{{(6k + 5)}^2}}}} \right)\\
+                \zeta (3) &= \frac{9}{{224}}\sum\limits_{k = 0}^\infty {\frac{1}{{{{4096}^k}}}}
+                \left(\begin{aligned}
+                &\frac{{1024}}{{{{(24k + 2)}^3}}} - \frac{{3072}}{{{{(24k + 3)}^3}}} + \frac{{512}}{{{{(24k + 4)}^3}}} +
+                \frac{{1024}}{{{{(24k + 6)}^3}}} + \frac{{1152}}{{{{(24k + 8)}^3}}}\\
+                +& \frac{{384}}{{{{(24k + 9)}^3}}} + \frac{{64}}{{{{(24k + 10)}^3}}} + \frac{{128}}{{{{(24k + 12)}^3}}}
+                + \frac{{16}}{{{{(24k + 14)}^3}}} + \frac{{48}}{{{{(24k + 15)}^3}}} + \frac{{72}}{{{{(24k + 16)}^3}}}\\
+                +& \frac{{16}}{{{{(24k + 18)}^3}}} + \frac{2}{{{{(24k + 20)}^3}}} - \frac{6}{{{{(24k + 21)}^3}}} +
+                \frac{1}{{{{(24k + 22)}^3}}}\\
+                \end{aligned} \right)\\
+                \end{aligned}$$</div>
+            <pre><code id="demo-output-1" class="language-js">$$\begin{aligned}
+                \pi &= \frac{1}{2}\sum\limits_{k = 0}^\infty {\frac{1}{{{{16}^k}}}} \left( {\frac{8}{{8k + 2}} + \frac{4}{{8k + 3}} + \frac{4}{{8k + 4}} - \frac{1}{{8k + 7}}} \right)\\
+                \zeta (2) &= \frac{{{\pi ^2}}}{6} = \frac{3}{{16}}\sum\limits_{k = 0}^\infty {\frac{1}{{{{64}^k}}}} \left( {\frac{{16}}{{{{(6k + 1)}^2}}} - \frac{{24}}{{{{(6k + 2)}^2}}} - \frac{8}{{{{(6k + 3)}^2}}} - \frac{6}{{{{(6k + 4)}^2}}} + \frac{1}{{{{(6k + 5)}^2}}}} \right)\\
+                \zeta (3) &= \frac{9}{{224}}\sum\limits_{k = 0}^\infty {\frac{1}{{{{4096}^k}}}}
+                \left(\begin{aligned}
+                &\frac{{1024}}{{{{(24k + 2)}^3}}} - \frac{{3072}}{{{{(24k + 3)}^3}}} + \frac{{512}}{{{{(24k + 4)}^3}}} + \frac{{1024}}{{{{(24k + 6)}^3}}} + \frac{{1152}}{{{{(24k + 8)}^3}}}\\
+                +& \frac{{384}}{{{{(24k + 9)}^3}}} + \frac{{64}}{{{{(24k + 10)}^3}}} + \frac{{128}}{{{{(24k + 12)}^3}}} + \frac{{16}}{{{{(24k + 14)}^3}}} + \frac{{48}}{{{{(24k + 15)}^3}}} + \frac{{72}}{{{{(24k + 16)}^3}}}\\
+                +& \frac{{16}}{{{{(24k + 18)}^3}}} + \frac{2}{{{{(24k + 20)}^3}}} - \frac{6}{{{{(24k + 21)}^3}}} + \frac{1}{{{{(24k + 22)}^3}}}\\
+                \end{aligned} \right)\\
+                \end{aligned}$$</code></pre>
+            <label for="demo-output-tex-1">Refined TeX: </label>
+            <div id="demo-output-tex-1">$$\begin{aligned}
+                \pi &= \frac{1}{2}\sum\limits_{k = 0}^\infty {\frac{1}{{{{16}^k}}}} \left( {\frac{8}{{8k + 2}} +
+                \frac{4}{{8k + 3}} + \frac{4}{{8k + 4}} - \frac{1}{{8k + 7}}} \right)\\
+                \zeta (2) &= \frac{{{\pi ^2}}}{6} = \frac{3}{{16}}\sum\limits_{k = 0}^\infty {\frac{1}{{{{64}^k}}}}
+                \left( {\frac{{16}}{{{{(6k + 1)}^2}}} - \frac{{24}}{{{{(6k + 2)}^2}}} - \frac{8}{{{{(6k + 3)}^2}}} -
+                \frac{6}{{{{(6k + 4)}^2}}} + \frac{1}{{{{(6k + 5)}^2}}}} \right)\\
+                \zeta (3) &= \frac{9}{{224}}\sum\limits_{k = 0}^\infty {\frac{1}{{{{4096}^k}}}}
+                \left(\begin{aligned}
+                &\frac{{1024}}{{{{(24k + 2)}^3}}} - \frac{{3072}}{{{{(24k + 3)}^3}}} + \frac{{512}}{{{{(24k + 4)}^3}}} +
+                \frac{{1024}}{{{{(24k + 6)}^3}}} + \frac{{1152}}{{{{(24k + 8)}^3}}}\\
+                +& \frac{{384}}{{{{(24k + 9)}^3}}} + \frac{{64}}{{{{(24k + 10)}^3}}} + \frac{{128}}{{{{(24k + 12)}^3}}}
+                + \frac{{16}}{{{{(24k + 14)}^3}}} + \frac{{48}}{{{{(24k + 15)}^3}}} + \frac{{72}}{{{{(24k + 16)}^3}}}\\
+                +& \frac{{16}}{{{{(24k + 18)}^3}}} + \frac{2}{{{{(24k + 20)}^3}}} - \frac{6}{{{{(24k + 21)}^3}}} +
+                \frac{1}{{{{(24k + 22)}^3}}}\\
+                \end{aligned} \right)\\
+                \end{aligned}$$</div>
         </div>
-        <hr>
-        <div class="cell">
-            <button onClick="calculateArea(2)">Evaluate</button>
-            <button onClick="calculateArea(2)">Copy Raw</button>
-            <button onClick="calculateArea(2)">Copy Out</button>
-            <button onClick="calculateArea(2)">Copy TeX</button><br>
-            <textarea id="demo-input-2" spellcheck="false" rows="4">expand((1+x)^2)</textarea>
-            <pre><code id="demo-output-2" class="language-js">1 + 2 x + x^2</code></pre>
-            <label for="demo-tex-2">TeXForm: </label>
-            <div id="demo-tex-2">$$1 + 2 x + x^2$$</div>
-        </div>
-        <hr>
-        <div class="cell">
-            <button onClick="calculateArea(3)">Evaluate</button>
-            <button onClick="calculateArea(3)">Copy Raw</button>
-            <button onClick="calculateArea(3)">Copy Out</button>
-            <button onClick="calculateArea(3)">Copy TeX</button><br>
-            <textarea id="demo-input-3" spellcheck="false"
-                rows="4">[[1], 2, Nothing, Sequence(2, Sequence(3, 4))]</textarea>
-            <pre><code id="demo-output-3" class="language-js">[[1], 2, 2, 3, 4]</code></pre>
-            <label for="demo-tex-3">TeXForm: </label>
-            <div id="demo-tex-3">$$\{\{1\}, 2, 2, 3, 4\}$$</div>
-        </div>
-
     </main>
 </body>
 
