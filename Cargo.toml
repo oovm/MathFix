@@ -1,5 +1,5 @@
 [package]
-name = "mathfix-playground"
+name = "mathfix_playground"
 publish = false
 version = "0.0.1"
 authors = ["Aster <galaster@foxmail.com>"]
