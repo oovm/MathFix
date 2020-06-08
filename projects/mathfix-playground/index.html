@@ -8,11 +8,10 @@
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js"
         crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
     <script type="module">
-        import init, { result, result_tex } from "https://cdn.jsdelivr.net/npm/sm_playground@0.0.3/sm_playground.js"
+        import init, { latex_fmt } from "https://cdn.jsdelivr.net/npm/mathfix_playground@0.0.1/mathfix_playground.js"
         async function run() {
             await init();
-            window.forward = result;
-            window.forward_tex = result_tex;
+            window.latex_fmt = latex_fmt;
         }
         run();
     </script>
@@ -34,7 +33,7 @@
                 +& \frac{{16}}{{{{(24k + 18)}^3}}} + \frac{2}{{{{(24k + 20)}^3}}} - \frac{6}{{{{(24k + 21)}^3}}} + \frac{1}{{{{(24k + 22)}^3}}}\\
                 \end{aligned} \right)\\
                 \end{aligned}$$</textarea>
-            <label for="demo-output-tex-1">Raw TeX: </label>
+            <label for="demo-input-tex-1">Raw TeX: </label>
             <div id="demo-input-tex-1">$$\begin{aligned}
                 \pi &= \frac{1}{2}\sum\limits_{k = 0}^\infty {\frac{1}{{{{16}^k}}}} \left( {\frac{8}{{8k + 2}} +
                 \frac{4}{{8k + 3}} + \frac{4}{{8k + 4}} - \frac{1}{{8k + 7}}} \right)\\
@@ -85,15 +84,20 @@
 <script>
     function calculateArea(i) {
         const input = document.getElementById('demo-input-' + i).value;
-        document.getElementById('demo-output-' + i).innerText = forward(input)
-        katex.render(
-            forward_tex(input),
-            document.getElementById('demo-tex-' + i),
-            {
-                throwOnError: false,
-                displayMode: true,
-            }
-        );
+        const output = latex_fmt(input);
+        const katex_settings = {
+            throwOnError: false,
+            displayMode: true,
+        }
+        katex.render(input, document.getElementById('demo-input-tex-' + i), katex_settings);
+        document.getElementById('demo-output-' + i).innerText = output
+        katex.render(output, document.getElementById('demo-output-tex-' + i), katex_settings);
+    }
+    
+    function trimByChar(string, character) {
+        const first = [...string].findIndex(char => char !== character);
+        const last = [...string].reverse().findIndex(char => char !== character);
+        return string.substring(first, string.length - last);
     }
 </script>
 
