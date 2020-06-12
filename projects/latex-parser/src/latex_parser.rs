@@ -5,7 +5,6 @@ pub enum Rule {
     EOI,
     program,
     statement,
-    empty_line,
     RestOfLine,
     Group,
     Atom,
@@ -47,12 +46,7 @@ impl ::pest::Parser<Rule> for LaTeXParser {
                 #[inline]
                 #[allow(non_snake_case, unused_variables)]
                 pub fn statement(state: Box<::pest::ParserState<Rule>>) -> ::pest::ParseResult<Box<::pest::ParserState<Rule>>> {
-                    self::SEPARATOR(state).or_else(|state| state.sequence(|state| self::empty_line(state).and_then(|state| super::hidden::skip(state)).and_then(|state| state.sequence(|state| state.optional(|state| self::empty_line(state).and_then(|state| state.repeat(|state| state.sequence(|state| super::hidden::skip(state).and_then(|state| self::empty_line(state)))))))))).or_else(|state| self::Expression(state))
-                }
-                #[inline]
-                #[allow(non_snake_case, unused_variables)]
-                pub fn empty_line(state: Box<::pest::ParserState<Rule>>) -> ::pest::ParseResult<Box<::pest::ParserState<Rule>>> {
-                    state.sequence(|state| state.sequence(|state| state.optional(|state| self::WHITESPACE(state).and_then(|state| state.repeat(|state| state.sequence(|state| super::hidden::skip(state).and_then(|state| self::WHITESPACE(state))))))).and_then(|state| super::hidden::skip(state)).and_then(|state| self::NEWLINE(state)))
+                    self::SEPARATOR(state).or_else(|state| self::Expression(state))
                 }
                 #[inline]
                 #[allow(non_snake_case, unused_variables)]
@@ -195,7 +189,6 @@ impl ::pest::Parser<Rule> for LaTeXParser {
         ::pest::state(input, |state| match rule {
             Rule::program => rules::program(state),
             Rule::statement => rules::statement(state),
-            Rule::empty_line => rules::empty_line(state),
             Rule::RestOfLine => rules::RestOfLine(state),
             Rule::Group => rules::Group(state),
             Rule::Atom => rules::Atom(state),
