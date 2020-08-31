@@ -1,5 +1,5 @@
-Arc Readable Configuration on rust
-==================================
+Markdown Math Fix
+=================
 
 Try Online: [PlayGround](https://galaster.github.io/MathFix/)
 
